@@ -1,21 +1,5 @@
----
-title: "Winter Storm Fern Situation Report - January 2026"
-execute: 
-  warning: false
-  message: false
-  output: false
-  echo: false
-fig-pos: H
-format:
-  pdf:
-    colorlinks: true
-    pdf-engine: xelatex
----
+######------- Data Cleaning Functions --------#######
 
-# FUNCTIONS
-
-## Imputation
-```{r}
 # Convert possible "\N" values to proper numeric NA values
 clean_numeric <- function(x) {
   suppressWarnings(as.numeric(na_if(as.character(x), "\\N")))
@@ -119,14 +103,10 @@ calculate_county_percent_change <- function(df,
       percent_change = ((n_crisis - n_baseline) / (n_baseline + small_value)) * 100
     )
 }
-```
 
 
-## Latitude and Longitude
 
-```{r}
-
-# Assign coordinates to counties
+####### -------- Assign coordinates to counties #######
 
 # convert latitude/longitude points into sf objects, then join them to county polygons
 library(sf)
@@ -168,11 +148,9 @@ add_county_from_coords <- function(df, lat_col, lon_col, prefix = "") {
       "{prefix}county_geoid" := county_geoid
     )
 }
-```
 
-## Aggregate CSVs
+###### ----- Aggregate CSVs ------ ######
 
-```{r}
 aggregate_csvs <- function(path_parts,
                            output_name = "aggregated.csv",
                            dedupe = TRUE,
@@ -264,11 +242,8 @@ aggregate_csvs <- function(path_parts,
   
   return(combined_data)
 }
-```
 
-## Fast Aggregate Counties
 
-```{r}
 add_movement_counties_fast <- function(df,
                                        start_lat = "start_latitude",
                                        start_lon = "start_longitude",
@@ -315,11 +290,8 @@ add_movement_counties_fast <- function(df,
   
   return(df)
 }
-```
 
-## Summary Statistics
 
-```{r}
 analyze_dataset <- function(df) {
   list(
     missing = df |>
@@ -334,13 +306,9 @@ analyze_dataset <- function(df) {
     n_cols = ncol(df)
   )
 }
-```
 
-## Demographics
+###### -------- Demographic Data -------- ######
 
-Request [API key here](https://api.census.gov/data/key_signup.html)
-
-```{r}
 library(tidycensus)
 
 # You only need to run this once if you have not already set a Census API key
@@ -389,9 +357,8 @@ write_csv(
   county_demographics,
   here("Outputs", "county_demographics_acs.csv")
 )
-```
 
-```{r}
+
 # Helper to join demographics
 
 add_demographics <- function(df,
@@ -417,17 +384,11 @@ add_demographics <- function(df,
       by = setNames("county_geoid", geoid_col)
     )
 }
-```
 
 
-# DATA AGGREGATION
-
-## General
-
-```{r}
 ##### ------ Business Activity ------ #####
 ba_data <- aggregate_csvs(
-  path_parts = c("Data","Fern_General", "Business_Activity"),
+  path_parts = c("Data","Business Activity Trends During Crisis"),
   output_name = "business_activity_aggregated.csv",
   lat_col = "latitude",
   lon_col = "longitude",
@@ -442,89 +403,17 @@ write_csv(
   ba_data,
   here("Outputs", "business_activity_aggregated.csv")
 )
-```
 
-```{r, execute=FALSE}
-mp_data <- aggregate_csvs(
-  path_parts = c("Data", "Fern_General", "Movement_between_Places"),
-  output_name = "movement_between_places_aggregated.csv"
-)
 
-mp_data <- add_movement_counties_fast(mp_data)
 
-write_csv(
-  mp_data,
-  here("Outputs", "movement_between_places_aggregated.csv")
-)
-
-```
-
-```{r}
 ##### ------ Summary Statistics ------ #####
 analyze_dataset(ba_data)
-analyze_dataset(mp_data)
-```
-
-## Tennessee and Kentucky
-
-```{r}
-##### ------ Movement Between Places During a Crisis ------ #####
-
-tk_mp_data_admin <- aggregate_csvs(
-  path_parts = c("Data", "Tennessee_Kentucky", "Fern_Movement_Crisis", "Administrative_Regions"),
-  output_name = "tk_movement_between_places_aggregated_admin.csv"
-)
-
-tk_mp_data_admin <- add_movement_counties_fast(tk_mp_data_admin)
-
-tk_mp_data_admin <- tk_mp_data_admin |>
-  add_demographics(
-    geoid_col = "start_county_geoid",
-    prefix = "start_"
-  ) |>
-  add_demographics(
-    geoid_col = "end_county_geoid",
-    prefix = "end_"
-  )
-
-write_csv(
-  tk_mp_data_admin,
-  here("Outputs", "tk_movement_between_places_aggregated_admin.csv")
-)
 
 
-```
-
-```{r}
-tk_mp_data_bing <- aggregate_csvs(
-  path_parts = c("Data", "Tennessee_Kentucky", "Fern_Movement_Crisis", "Bing_Tiles"),
-  output_name = "tk_movement_between_places_aggregated_bing.csv"
-)
-
-tk_mp_data_bing <- add_movement_counties_fast(tk_mp_data_bing)
-
-tk_mp_data_bing <- tk_mp_data_bing |>
-  add_demographics(
-    geoid_col = "start_county_geoid",
-    prefix = "start_"
-  ) |>
-  add_demographics(
-    geoid_col = "end_county_geoid",
-    prefix = "end_"
-  )
-
-write_csv(
-  tk_mp_data_bing,
-  here("Outputs", "tk_movement_between_places_aggregated_bing.csv")
-)
-
-```
-
-```{r}
 ##### ------ Facebook Population during crisis ------ #####
-tk_fb_data_admin <- aggregate_csvs(
-  path_parts = c("Data", "Tennessee_Kentucky", "Fern_Facebook_Pop_Crisis", "Administrative_Regions"),
-  output_name = "tk_facebook_pop_aggregated_admin.csv",
+fb_data_admin <- aggregate_csvs(
+  path_parts = c("Data", "Facebook Population During Crisis", "Admin Regions"),
+  output_name = "facebook_pop_aggregated_admin.csv",
   lat_col = "latitude",
   lon_col = "longitude",
   prefix = "",
@@ -533,21 +422,20 @@ tk_fb_data_admin <- aggregate_csvs(
   county_group_cols = c("county_geoid", "county_name", "county_state", "ds","hour")
 )
 
-tk_fb_data_admin <- add_demographics(
-  df = tk_fb_data_admin,
+fb_data_admin <- add_demographics(
+  df = fb_data_admin,
   geoid_col = "county_geoid"
 )
 
 write_csv(
-  tk_fb_data_admin,
-  here("Outputs", "tk_facebook_pop_aggregated_admin.csv")
+  fb_data_admin,
+  here("Outputs", "facebook_pop_aggregated_admin.csv")
 )
-```
 
-```{r}
-tk_fb_data_bing <- aggregate_csvs(
-  path_parts = c("Data", "Tennessee_Kentucky", "Fern_Facebook_Pop_Crisis", "Bing_Tiles"),
-  output_name = "tk_facebook_pop_aggregated_bing.csv",
+
+fb_data_bing <- aggregate_csvs(
+  path_parts = c("Data", "Facebook Population During Crisis", "Bing Tiles"),
+  output_name = "facebook_pop_aggregated_bing.csv",
   lat_col = "latitude",
   lon_col = "longitude",
   prefix = "",
@@ -556,109 +444,122 @@ tk_fb_data_bing <- aggregate_csvs(
   county_group_cols = c("county_geoid", "county_name", "county_state", "ds","hour")
 )
 
-tk_fb_data_bing <- add_demographics(
-  df = tk_fb_data_bing,
+fb_data_bing <- add_demographics(
+  df = fb_data_bing,
   geoid_col = "county_geoid"
 )
 
 write_csv(
-  tk_fb_data_bing,
-  here("Outputs", "tk_facebook_pop_aggregated_bing.csv")
+  fb_data_bing,
+  here("Outputs", "facebook_pop_aggregated_bing.csv")
 )
-```
 
-```{r}
+
 
 ##### ------ Network Coverage ------ #####
 
-tk_nc_data_active <- aggregate_csvs(
-  path_parts = c("Data", "Tennessee_Kentucky", "Fern_Network_Coverage", "Active"),
-  output_name = "tk_network_coverage_aggregated_active.csv",
+nc_data_active <- aggregate_csvs(
+  path_parts = c("Data", "Network Coverage Maps","Active"),
+  output_name = "network_coverage_aggregated_active.csv",
   lat_col = "lat",
   lon_col = "lon",
   prefix = ""
 )
 
-tk_nc_data_active <- add_demographics(
-  df = tk_nc_data_active,
+nc_data_active <- add_demographics(
+  df = nc_data_active,
   geoid_col = "county_geoid"
 )
 
 write_csv(
-  tk_nc_data_active,
-  here("Outputs", "tk_network_coverage_aggregated_active.csv")
+  nc_data_active,
+  here("Outputs", "network_coverage_aggregated_active.csv")
 )
-```
 
-```{r}
-tk_nc_data_undetected <- aggregate_csvs(
-  path_parts = c("Data", "Tennessee_Kentucky", "Fern_Network_Coverage", "Undetected"),
-  output_name = "tk_network_coverage_aggregated_undetected.csv",
+
+nc_data_undetected <- aggregate_csvs(
+  path_parts = c("Data", "Network Coverage Maps","Undetected"),
+  output_name = "network_coverage_aggregated_undetected.csv",
   lat_col = "lat",
   lon_col = "lon",
   prefix = ""
 )
 
-tk_nc_data_undetected <- add_demographics(
-  df = tk_nc_data_undetected,
+nc_data_undetected <- add_demographics(
+  df = nc_data_undetected,
   geoid_col = "county_geoid"
 )
 
 write_csv(
-  tk_nc_data_undetected,
-  here("Outputs", "tk_network_coverage_aggregated_undetected.csv")
+  nc_data_undetected,
+  here("Outputs", "network_coverage_aggregated_undetected.csv")
 )
-```
 
-```{r}
+
+nc_data_probability <- aggregate_csvs(
+  path_parts = c("Data", "Network Coverage Maps","Probability"),
+  output_name = "network_coverage_aggregated_probability.csv",
+  lat_col = "lat",
+  lon_col = "lon",
+  prefix = ""
+)
+
+nc_data_probability <- add_demographics(
+  df = nc_data_probability,
+  geoid_col = "county_geoid"
+)
+
+write_csv(
+  nc_data_probability,
+  here("Outputs", "network_coverage_aggregated_probability.csv")
+)
+
+###### ------- Facebook Population w/o Aggregation ----#####
 small_value = 1
-tk_facebook_pop_bing <- aggregate_csvs(
-   path_parts = c("Data", "Tennessee_Kentucky", "Fern_Facebook_Pop_Crisis", "Bing_Tiles"),
-   output_name = "tk_facebook_pop_bing.csv",
+facebook_pop_admin <- aggregate_csvs(
+  path_parts = c("Data", "Facebook Population During Crisis", "Admin Regions"),
+   output_name = "facebook_pop_admin.csv",
    lat_col = "latitude",
    lon_col = "longitude",
    prefix = "",
    impute_counts = TRUE
  )
 
-tk_facebook_pop_bing <- add_demographics(
-   df = tk_facebook_pop_bing,
+facebook_pop_admin <- add_demographics(
+   df = facebook_pop_admin,
    geoid_col = "county_geoid"
  )
-tk_facebook_pop_bing <- tk_facebook_pop_bing |>
+
+facebook_pop_admin <- facebook_pop_admin |>
   mutate(
     percent_change = ((n_crisis - n_baseline) / (n_baseline + small_value)) * 100
     )
 
 write_csv(
-   tk_facebook_pop_bing,
-   here("Outputs", "tk_facebook_pop_bing.csv")
- )
-```
-
-```{r}
-tk_facebook_pop_admin <- aggregate_csvs(
-   path_parts = c("Data", "Tennessee_Kentucky", "Fern_Facebook_Pop_Crisis", "Administrative_Regions"),
-   output_name = "tk_facebook_pop_admin.csv",
-   lat_col = "latitude",
-   lon_col = "longitude",
-   prefix = "",
-   impute_counts = TRUE
+   facebook_pop_admin,
+   here("Outputs", "facebook_pop_admin.csv")
  )
 
-tk_facebook_pop_admin <- add_demographics(
-   df = tk_facebook_pop_admin,
-   geoid_col = "county_geoid"
- )
+fb_data_bing <- aggregate_csvs(
+  path_parts = c("Data", "Facebook Population During Crisis", "Bing Tiles"),
+  output_name = "facebook_pop_bing.csv",
+  lat_col = "latitude",
+  lon_col = "longitude",
+  prefix = "",
+  impute_counts = TRUE
+)
 
-tk_facebook_pop_admin <- tk_facebook_pop_admin |>
+fb_data_bing <- add_demographics(
+  df = fb_data_bing,
+  geoid_col = "county_geoid"
+)
+
+fb_data_bing <- fb_data_bing |>
   mutate(
     percent_change = ((n_crisis - n_baseline) / (n_baseline + small_value)) * 100
-    )
+  )
 
 write_csv(
-   tk_facebook_pop_admin,
-   here("Outputs", "tk_facebook_pop_admin.csv")
- )
-```
-
+  fb_data_bing,
+  here("Outputs", "facebook_pop_bing.csv")
+)

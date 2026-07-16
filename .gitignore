@@ -1,0 +1,18 @@
+
+# Data
+Data/
+*.xlsx
+*.csv
+*.json
+
+# Outputs
+Outputs/
+*.xlsx
+*.csv
+*.json
+
+
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata

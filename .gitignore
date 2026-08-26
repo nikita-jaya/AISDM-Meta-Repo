@@ -1,10 +1,16 @@
 # Data
 data/
+=======
+
+# Data
+Data/
+>>>>>>> temp-source/main
 *.xlsx
 *.csv
 *.json
 
 # Outputs
+<<<<<<< HEAD
 outputs/
 
 # Jupyter
@@ -20,3 +26,14 @@ __pycache__/
 .vscode
 .Rproj.user
 .Rhistory
+=======
+Outputs/
+*.xlsx
+*.csv
+*.json
+
+
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata

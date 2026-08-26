@@ -305,7 +305,7 @@ shared_limits <- function(col, symmetric = FALSE,
 shared_eq_limits <- function(
     lon_limits,
     lat_limits,
-    start_date = Sys.Date() - 15,
+    start_date = Sys.Date() - 17,
     end_date = Sys.Date(),
     min_magnitude = 2.5
 ) {

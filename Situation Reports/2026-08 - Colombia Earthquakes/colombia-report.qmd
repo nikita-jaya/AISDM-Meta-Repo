@@ -53,7 +53,7 @@ lat_limits = c(4, 8)
 usgs_url <- paste0(
           "https://earthquake.usgs.gov/fdsnws/event/1/query?",
           "format=geojson",
-          "&starttime=", Sys.Date() - 15,
+          "&starttime=", Sys.Date() - 17,
           "&endtime=", Sys.Date(),
           "&minlatitude=", lat_limits[1],
           "&maxlatitude=", lat_limits[2],
@@ -128,16 +128,6 @@ area_medellin = 2.4*2.4*nrow(influx_table_Medellin)
 
 * $\underline{\text{Piedecuesta}}$: On Aug. 15, a 4.2-magnitude earthquake caused a patchwork of user influx and exodus across the area, relative to a 90-day baseline (@fig-pied_diff). 
 
-## Overview
-
-This report focuses on earthquakes in Colombia and population movements in the surrounding areas from Aug, 10-18, 2026. This time period covers five earthquakes in near San Jose del Palmar and Piedecuesta in Colombia (@tbl-earthquakes). This analysis focuses on high-activity areas (i.e. areas where there are more or fewer users during the time of crisis than compared to a 90-day baseline) near the epicenter of the earthquakes. There is also a relatively high influx near Bogota, but we do not focus on Bogota in this report.
-
-1. A major earthquake with a magnitude of 7.4 occurred near San Jose del Palmar on Aug. 10, followed by a sequence of moderate earthquakes (with magntiudes 4.3-5) near the same area from Aug. 10-13. Near this area, there seems to be a **large exodus near Dosquebradas** in the province of Risaralda (@fig-mani_diff), and a **slight inflow into Medellin** in the province of Antioquia (@fig-medellin_diff).
-
-2. There was also a moderate earthquake of magnitude 4.2 near Piedecuesta on August 15th. This area has a many points of inflow and outflow, with some notably high levels of inflow near Villanueva, Santander and Covarachia, Boyaca (@fig-pied_diff).
-
-3. We note that population differences (relative to a prior 90-day baseline level) do not imply large/small raw population counts present in each city. These can remain high throughout the crises (@fig-counts). 
-
 ```{r}
 #| output: true
 #| label: tbl-earthquakes
@@ -157,6 +147,16 @@ earthquakes_final <- earthquakes |>
   
 knitr::kable(earthquakes_final, digits = 1)
 ```
+
+## Overview
+
+This report focuses on earthquakes in Colombia and population movements in the surrounding areas from Aug, 10-18, 2026. This time period covers five earthquakes in near San Jose del Palmar and Piedecuesta in Colombia (@tbl-earthquakes). This analysis focuses on high-activity areas (i.e. areas where there are more or fewer users during the time of crisis than compared to a 90-day baseline) near the epicenter of the earthquakes. There is also a relatively high influx near Bogota, but we do not focus on Bogota in this report.
+
+1. A major earthquake with a magnitude of 7.4 occurred near San Jose del Palmar on Aug. 10, followed by a sequence of moderate earthquakes (with magntiudes 4.3-5) near the same area from Aug. 10-13. Near this area, there seems to be a **large exodus near Dosquebradas** in the province of Risaralda (@fig-mani_diff), and a **slight inflow into Medellin** in the province of Antioquia (@fig-medellin_diff).
+
+2. There was also a moderate earthquake of magnitude 4.2 near Piedecuesta on August 15th. This area has a many points of inflow and outflow, with some notably high levels of inflow near Villanueva, Santander and Covarachia, Boyaca (@fig-pied_diff).
+
+3. We note that population differences (relative to a prior 90-day baseline level) do not imply large/small raw population counts present in each city. These can remain high throughout the crises (@fig-counts). 
 
 
 ## 1. Per-tile user population: Difference in crisis window vs. pre-crisis baseline

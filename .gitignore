@@ -1,16 +1,13 @@
 # Data
 data/
-=======
-
-# Data
 Data/
->>>>>>> temp-source/main
-*.xlsx
+
+# Ignore all CSV, Excel, and JSON files anywhere
 *.csv
+*.xlsx
 *.json
 
 # Outputs
-<<<<<<< HEAD
 outputs/
 
 # Jupyter
@@ -26,7 +23,7 @@ __pycache__/
 .vscode
 .Rproj.user
 .Rhistory
-=======
+
 Outputs/
 *.xlsx
 *.csv

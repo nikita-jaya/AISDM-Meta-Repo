@@ -1,0 +1,22 @@
+# Data
+data/
+*.xlsx
+*.csv
+*.json
+
+# Outputs
+outputs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+
+.vscode
+.Rproj.user
+.Rhistory

@@ -2,16 +2,16 @@
 
 ## Repo Structure
 
-* [Interactive Version](https://github.com/nikita-jaya/AISDM-Meta-Repo/tree/main/Interactive%20Version) - An interactive streamlit version of situation reports for disasters, including:
+* [Interactive Version](https://github.com/nikita-jaya/AISDM-Meta-Repo/tree/main/Interactive_Version) - (Python )An interactive streamlit version of situation reports for disasters, including:
 	* Winter Storm Fern - 02/2026
 	* California Wildfires - 05/2026
-* [Situation Reports](https://github.com/nikita-jaya/AISDM-Meta-Repo/tree/main/Situation%20Reports) - Brief documents that are designed to help inform emergency managers (EMs) on people movements after each disaster, including:
+* [Situation Reports](https://github.com/nikita-jaya/AISDM-Meta-Repo/tree/main/Situation_Reports) - (R) Brief documents that are designed to help inform emergency managers (EMs) on people movements after each disaster, including:
 	* Winter Storm Fern - 02/2026 **FINISHED**
 	* California Wildfires - 05/2026
 	* Bordeaux Wildfires - 07/2026 
 	* Spokane Fires - 08/2026 **FINISHED**
 	* Colombia Earthquakes - 08/2026 **FINISHED**
-* [SAM Attempt](https://github.com/nikita-jaya/AISDM-Meta-Repo/tree/main/SAM%20Attempt) - Initial attempts at incorporating Meta's SAM model for disaster management
+* [SAM Attempt](https://github.com/nikita-jaya/AISDM-Meta-Repo/tree/main/SAM_Attempt) - (Python) Initial attempts at incorporating Meta's SAM model for disaster management
 
 
 ## Folder Structure: Situation Reports

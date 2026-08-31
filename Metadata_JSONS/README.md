@@ -4,7 +4,7 @@ Summary of all disasters and their available data and
 development status.
 
 | Disaster | Country | Type | Disaster start | Data start | Data end | Available data | Report Status | Interactive Status |
-|---|---|---|---|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|---|---|---|
 | Bordeaux Fires | France | wildfire | 2026-07-22 | 2026-07-27 | 2026-08-10 | Population, Movement, Business Activity, Network Coverage | In development | Not available |
 | California Wildfires | USA | wildfire | 2026-05-19 | 2026-05-19 | 2026-06-02 | Population, Business Activity, Network Coverage | In development | In development |
 | Colombia Earthquakes | Colombia | earthquake | 2026-08-10 | 2026-08-10 | 2026-08-24 | Population, Movement, Business Activity, Network Coverage | Complete | Not available |
